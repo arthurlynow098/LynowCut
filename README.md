@@ -1,11 +1,9 @@
 <p align="center">
-  <img src="assets/mascot-ui.png" alt="LynowCut" width="230">
+  <img src="assets/lynowcut-banner.png" alt="LynowCut" width="100%">
 </p>
 
-<h1 align="center">LynowCut</h1>
-
 <p align="center">
-  Comprima imagens, vídeos, áudios, PDFs e documentos localmente no Windows.
+  Escolha quanto o arquivo precisa pesar. O LynowCut cuida do resto — sem mandar nada para a nuvem.
 </p>
 
 <p align="center">
@@ -19,26 +17,26 @@
 
 ## Sobre o projeto
 
-O LynowCut nasceu de uma necessidade prática: preparar arquivos para caber no destino sem depender de vários sites, conversores ou compressores diferentes. O usuário adiciona os arquivos, define uma porcentagem de redução ou um tamanho máximo e acompanha o resultado real de cada item.
+Todo mundo já passou por isso: o PDF não cabe no e-mail, o vídeo ficou pesado demais ou uma pasta de imagens ocupa muito mais espaço do que deveria. O LynowCut nasceu para resolver esse momento sem transformar uma tarefa simples em uma sequência de sites, conversores e configurações confusas.
 
-Todo o processamento acontece no computador. Não há conta, nuvem, anúncios ou telemetria. Os arquivos originais são preservados e as versões processadas são gravadas em uma pasta de saída separada.
+Você escolhe quanto quer reduzir ou informa o tamanho máximo. O programa procura o melhor resultado possível, mostra quanto espaço foi recuperado e salva uma nova cópia. Tudo acontece no seu computador: sem conta, sem nuvem, sem anúncios e sem mexer no arquivo original.
 
 <p align="center">
-  <img src="assets/mascot.png" alt="Identidade visual do LynowCut" width="620">
+  <img src="assets/lynowcut-app.png" alt="Aplicativo LynowCut para Windows" width="100%">
 </p>
 
 ## Principais recursos
 
 | Recurso | Como funciona |
 |---|---|
-| Meta por porcentagem | Calcula o tamanho desejado a partir do arquivo original e procura a melhor combinação de qualidade e resolução. |
-| Tamanho máximo | Permite informar um limite em MB para preparar arquivos para anexos, plataformas e armazenamento. |
-| Imagens otimizadas | Comprime e converte JPEG, PNG, WebP, AVIF, TIFF, BMP, HEIC e outros formatos compatíveis. |
-| PDFs e documentos | Otimiza PDFs e contêineres modernos como DOCX, PPTX, XLSX, ODT, ODS, ODP e EPUB. |
-| Vídeo e áudio | Usa FFmpeg opcional para comprimir mídia, converter vídeos e extrair faixas de áudio. |
-| Privacidade local | Os arquivos não são enviados para servidores externos e os originais nunca são sobrescritos. |
-| Organização da saída | Cria arquivos com nomes seguros, evita colisões e permite escolher a pasta de destino. |
-| Relatório e comparação | Exibe o espaço recuperado, permite comparar imagens e exportar os resultados em CSV. |
+| Meta por porcentagem | Você escolhe quanto quer reduzir; o LynowCut equilibra qualidade, resolução e tamanho. |
+| Tamanho máximo | Precisa caber em um anexo de 10 MB? Informe o limite e deixe o programa trabalhar nessa meta. |
+| Imagens otimizadas | Reduza fotos, artes e capturas ou converta para formatos modernos como WebP e AVIF. |
+| PDFs e documentos | Deixe apresentações, planilhas, arquivos do Word e PDFs mais fáceis de guardar e compartilhar. |
+| Vídeo e áudio | Comprima vídeos ou guarde apenas o áudio quando a imagem não for necessária. |
+| Privacidade local | Seus arquivos continuam no seu computador e os originais nunca são substituídos. |
+| Organização da saída | Escolha onde salvar; o programa evita nomes repetidos e mantém cada resultado organizado. |
+| Relatório e comparação | Veja o antes e depois, confira o espaço recuperado e exporte um resumo em CSV. |
 
 ## Tecnologias
 
@@ -98,11 +96,15 @@ A interface envia cada item da fila para o motor local com uma meta calculada. O
 
 ## Experiência no Windows
 
-O aplicativo foi pensado para deixar as decisões importantes visíveis: arquivos na fila, tamanho original, tamanho final, formato de saída, qualidade mínima e espaço recuperado. Opções mais avançadas, como recorte de mídia e redimensionamento para atingir a meta, aparecem somente quando são relevantes.
+O LynowCut tenta falar a língua de quem só precisa resolver o arquivo. A fila mostra o que entrou, o que saiu e quanto espaço foi economizado. Formato, qualidade e destino ficam visíveis, enquanto opções mais avançadas aparecem somente quando realmente ajudam.
 
 ## Compressão e identidade visual
 
-O tigre representa um corte preciso no excesso. A interface usa carvão, creme e laranja para manter continuidade com a família Lynow, enquanto os estados da fila explicam claramente quando a meta foi atingida, quando não há ganho possível ou quando algum recurso adicional é necessário.
+O tigre representa o corte preciso no excesso: firme no tamanho, cuidadoso com o conteúdo. A combinação de carvão, creme e laranja aproxima o LynowCut da família Lynow e transforma números técnicos em mensagens diretas — pronto, sem ganho, meta atingida ou recurso necessário.
+
+<p align="center">
+  <img src="assets/mascot-ui.png" alt="Tigre do LynowCut" width="420">
+</p>
 
 ## Fluxo de uso
 
