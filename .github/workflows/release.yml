@@ -1,0 +1,32 @@
+name: Publicar release do LynowCut
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar dependências
+        run: python -m pip install -r requirements-build.txt
+      - name: Validar o motor
+        run: python -m unittest discover -s tests -v
+      - name: Gerar aplicativo Windows
+        run: python -m PyInstaller --noconfirm --clean LynowCut.spec
+      - name: Empacotar distribuição
+        run: Compress-Archive -Path dist\LynowCut -DestinationPath LynowCut-Windows-x64.zip -CompressionLevel Optimal
+      - name: Criar release no GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: LynowCut-Windows-x64.zip

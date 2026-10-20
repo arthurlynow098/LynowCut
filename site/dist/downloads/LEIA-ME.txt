@@ -1,0 +1,8 @@
+LYNOWCUT PARA WINDOWS
+
+1. Extraia o arquivo LynowCut-Windows-x64.zip em uma pasta.
+2. Mantenha a pasta _internal ao lado de LynowCut.exe.
+3. Abra LynowCut.exe.
+
+O aplicativo processa seus arquivos localmente. Os recursos opcionais de
+áudio e vídeo podem ser instalados pela própria interface quando necessários.

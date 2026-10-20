@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+/build/
+/dist/
+bin/*.exe
+site/lynowcut-site.tgz
+site/dist/downloads/*.zip
