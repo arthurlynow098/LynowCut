@@ -98,14 +98,6 @@ A interface envia cada item da fila para o motor local com uma meta calculada. O
 
 O LynowCut tenta falar a língua de quem só precisa resolver o arquivo. A fila mostra o que entrou, o que saiu e quanto espaço foi economizado. Formato, qualidade e destino ficam visíveis, enquanto opções mais avançadas aparecem somente quando realmente ajudam.
 
-## Compressão e identidade visual
-
-O tigre representa o corte preciso no excesso: firme no tamanho, cuidadoso com o conteúdo. A combinação de carvão, creme e laranja aproxima o LynowCut da família Lynow e transforma números técnicos em mensagens diretas — pronto, sem ganho, meta atingida ou recurso necessário.
-
-<p align="center">
-  <img src="assets/mascot-ui.png" alt="Tigre do LynowCut" width="420">
-</p>
-
 ## Fluxo de uso
 
 1. Baixe o pacote para Windows em **[Releases](https://github.com/arthurlynow098/LynowCut/releases)**.
