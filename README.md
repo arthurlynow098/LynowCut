@@ -17,7 +17,7 @@
 
 ## Sobre o projeto
 
-Todo mundo já passou por isso: o PDF não cabe no e-mail, o vídeo ficou pesado demais ou uma pasta de imagens ocupa muito mais espaço do que deveria. O LynowCut nasceu para resolver esse momento sem transformar uma tarefa simples em uma sequência de sites, conversores e configurações confusas.
+Todo mundo já passou por isso, o PDF não cabe no e-mail, o vídeo ficou pesado demais ou uma pasta de imagens ocupa muito mais espaço do que deveria. O LynowCut nasceu para resolver esse momento sem transformar uma tarefa simples em uma sequência de sites, conversores e configurações confusas.
 
 Você escolhe quanto quer reduzir ou informa o tamanho máximo. O programa procura o melhor resultado possível, mostra quanto espaço foi recuperado e salva uma nova cópia. Tudo acontece no seu computador: sem conta, sem nuvem, sem anúncios e sem mexer no arquivo original.
 
