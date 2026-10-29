@@ -67,6 +67,7 @@ class SafetyTests(unittest.TestCase):
     def media_archive(self):
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, 'w') as archive:
+            archive.writestr('ffmpeg/LICENSE', 'Test license')
             archive.writestr('ffmpeg/bin/ffmpeg.exe', b'fake ffmpeg')
             archive.writestr('ffmpeg/bin/ffprobe.exe', b'fake ffprobe')
         return buffer.getvalue()
@@ -78,7 +79,8 @@ class SafetyTests(unittest.TestCase):
             return subprocess.CompletedProcess(args, 0, text, b'')
         with patch.object(media_install, 'SHA256', hashlib.sha256(data).hexdigest()):
             target = media_install.install(self.root, opener=lambda *a, **kw: io.BytesIO(data), runner=runner)
-        self.assertEqual({p.name for p in target.iterdir()}, {'ffmpeg.exe', 'ffprobe.exe'})
+        self.assertEqual({p.name for p in target.iterdir()}, {'ffmpeg.exe', 'ffprobe.exe', 'licenses', 'SOURCE.txt'})
+        self.assertEqual((target / 'licenses/0-LICENSE').read_text(), 'Test license')
         self.assertFalse(list(self.root.glob('.media-*')))
 
     def test_media_bad_hash_and_cancel_leave_no_install(self):

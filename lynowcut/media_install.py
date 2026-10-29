@@ -46,6 +46,15 @@ def install(root, event=None, *, opener=urllib.request.urlopen, runner=subproces
         stage = temp / 'ready'
         stage.mkdir()
         with zipfile.ZipFile(archive) as package:
+            licenses = [i for i in package.infolist() if Path(i.filename).name.lower() in {'license', 'license.txt', 'copying', 'copying.txt'}]
+            if not licenses:
+                raise RuntimeError('O pacote de mídia não contém sua licença.')
+            notices = stage / 'licenses'; notices.mkdir()
+            for index, item in enumerate(licenses):
+                if item.file_size > 1024 * 1024:
+                    raise RuntimeError('Arquivo de licença de mídia inválido.')
+                (notices / f'{index}-{Path(item.filename).name}').write_bytes(package.read(item))
+            (stage / 'SOURCE.txt').write_text(f'FFmpeg {VERSION}\nBuild: {URL}\nSHA-256: {SHA256}\nBuild e instruções de fontes: https://www.gyan.dev/ffmpeg/builds/\nCondições: https://ffmpeg.org/legal.html\n', encoding='utf-8')
             for name in ('ffmpeg.exe', 'ffprobe.exe'):
                 matches = [i for i in package.infolist() if i.filename.replace('\\', '/').endswith('/bin/' + name)]
                 if len(matches) != 1 or matches[0].file_size > MAX_BINARY:
