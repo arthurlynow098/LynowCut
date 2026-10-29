@@ -8,13 +8,14 @@ def run(folder):
     from PIL import Image
     import pikepdf
     from pillow_heif import from_pillow
-    from PySide6.QtWidgets import QApplication
-    from .app import MainWindow
+    from .app import MainWindow, create_application
     from .engine import Options, binary, process, resource
 
     root = Path(folder).resolve(); root.mkdir(parents=True, exist_ok=True)
-    app = QApplication.instance() or QApplication([])
+    app = create_application()
     window = MainWindow(); window.show(); app.processEvents()
+    assert app.font().family().startswith('Inter'), 'Bundled font did not load'
+    assert window.grab().save(str(root / 'interface.png'))
     for name in ('assets/fonts/Inter.ttf', 'assets/lynowcut.ico', 'assets/mascot-ui.png'):
         assert resource(name).is_file(), name
     source = root / 'photo.bmp'

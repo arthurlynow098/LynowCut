@@ -319,7 +319,7 @@ class MainWindow(QMainWindow):
 
     def confirm_flatten_pdf(self):
         if self.flatten_pdf.isChecked():
-            answer = QMessageBox.warning(self, 'Achatar PDF', 'Esta opção pode transformar páginas em imagens e remover texto pesquisável, links, formulários e acessibilidade. Permitir para os PDFs desta fila?', QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
+            answer = QMessageBox.warning(self, 'Achatar PDF', 'Esta opção pode transformar páginas em imagens e remover texto pesquisável, links, formulários e acessibilidade. Permitir o achatamento de PDFs enquanto esta opção estiver ativada?', QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
             self.flatten_pdf.setChecked(answer == QMessageBox.StandardButton.Yes)
 
     def start(self):
@@ -476,9 +476,14 @@ QDialog {{ background: {CREAM}; }} QLabel#dialogTitle {{ font-size: 23px; font-w
 '''
 
 
-def main():
+def create_application():
     app = QApplication.instance() or QApplication(sys.argv)
     font_id = QFontDatabase.addApplicationFont(str(resource('assets/fonts/Inter.ttf')))
     family = QFontDatabase.applicationFontFamilies(font_id)[0] if font_id >= 0 else 'Segoe UI'
     app.setFont(QFont(family, 10)); app.setStyleSheet(STYLE)
+    return app
+
+
+def main():
+    app = create_application()
     window = MainWindow(); window.show(); app.exec()
