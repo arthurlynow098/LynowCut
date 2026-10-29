@@ -1,6 +1,6 @@
 # Publicar uma alpha Windows
 
-1. Atualize as dependências diretas nos requirements e resolva num venv limpo de Python 3.12.14/Windows x64. Instale `requirements-test.txt`, execute `python -m pip freeze --all` e atualize `requirements-lock.txt`. Revise todo o diff; o lock inclui dependências transitivas de runtime, build e teste.
+1. Atualize as dependências diretas nos requirements e resolva num venv limpo de Python 3.12.10/Windows x64. Instale `requirements-test.txt`, execute `python -m pip freeze --all` e atualize `requirements-lock.txt`. Revise todo o diff; o lock inclui dependências transitivas de runtime, build e teste.
 2. Mudanças de FFmpeg exigem atualizar URL/version/hash em `media_install.py`, verificar o pacote do fornecedor e executar instalação e testes reais. Não substitua o hash fixo por um hash obtido no momento de instalar.
 3. Abra uma PR. Exija o workflow Windows aprovado e revise o artefato: testes sem mídia ignorada, compatibilidade Office/ODF com LibreOffice, aplicativo extraído funcionando e qualidade visual de amostras reais.
 4. Atualize a matriz de capacidades, versão anunciada e notas. Crie uma nova tag `vX.Y.Z-alpha` sobre o commit aprovado. Não mova tags publicadas nem substitua silenciosamente o ZIP de uma versão anterior.

@@ -34,7 +34,7 @@ Vídeo é convertido para MP4 H.264/AAC; áudio para MP3. Apenas a primeira faix
 
 ## Executar o código-fonte
 
-Requer Windows x64 e Python 3.12.14 para reproduzir o ambiente de validação.
+Requer Windows x64 e Python 3.12.10 para reproduzir o ambiente de validação.
 
 ```powershell
 py -3.12 -m venv .venv
