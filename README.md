@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/arthurlynow098/arthurlynow098/main/assets/ars-codex-banner.png" alt="Arthur Mendes Entsev — gravura em preto e branco" width="100%"></p>
+<p align="center"><img src="assets/project-animal.png" alt="louva-a-deus — símbolo do projeto" width="280"></p>
 
 <p align="center"><sub>LynowCut</sub></p>
 
