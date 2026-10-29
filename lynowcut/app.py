@@ -228,7 +228,9 @@ class MainWindow(QMainWindow):
         self.flatten_pdf = button('Achatar PDF (remove texto, links e formulários)', 'toggle'); self.flatten_pdf.setCheckable(True); self.flatten_pdf.setChecked(False); self.flatten_pdf.clicked.connect(self.confirm_flatten_pdf)
         layout.addWidget(self.flatten_pdf)
         advanced = button('Recorte de mídia', 'quiet'); advanced.clicked.connect(self.show_advanced); third.addWidget(advanced); third.addStretch()
-        self.folder = button('Pasta de saída  ·  Downloads/LynowCut', 'destination'); self.folder.clicked.connect(self.choose_folder); third.addWidget(self.folder); layout.addLayout(third)
+        layout.addLayout(third)
+        self.folder = button('Pasta de saída  ·  Downloads/LynowCut', 'destination'); self.folder.clicked.connect(self.choose_folder)
+        destination = QHBoxLayout(); destination.addWidget(self.folder); destination.addStretch(); layout.addLayout(destination)
         examples = QHBoxLayout(); examples.setSpacing(7)
         examples.addWidget(self.label('SAÍDAS RECOMENDADAS', 'examplesLabel'))
         for icon, title, note in [('WEBP', 'Fotos para web', 'menor peso'), ('PDF', 'Documentos', 'compacto'), ('MP4', 'Vídeos', 'compatível'), ('MP3', 'Áudio', 'extraído')]:
