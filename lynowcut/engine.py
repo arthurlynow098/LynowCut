@@ -41,6 +41,7 @@ class Options:
     start: float = 0
     duration: float | None = None
     resize_to_target: bool = True
+    flatten_pdf: bool = False
 
     def target(self, size: int) -> int:
         if not 1 <= self.reduction <= 95:
@@ -75,8 +76,10 @@ def resource(relative: str) -> Path:
 
 
 def binary(name: str) -> str:
+    from .media_install import VERSION
     suffix = '.exe' if os.name == 'nt' else ''
-    candidates = [resource(f'bin/{name}{suffix}'), Path(sys.executable).parent / 'bin' / (name+suffix)]
+    root = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path(__file__).resolve().parents[1]
+    candidates = [root / f'media-{VERSION}' / (name+suffix), resource(f'bin/{name}{suffix}'), root / 'bin' / (name+suffix)]
     for candidate in candidates:
         if candidate.is_file():
             return str(candidate)
@@ -165,7 +168,7 @@ def image_compress(src, dst, options, target, event, progress):
             resized = True
         dst.write_bytes(data)
         if resized:
-            return f'PNG sem perdas adicionais: resolução ajustada de {original_size[0]}×{original_size[1]} para {img.width}×{img.height}.'
+            return f'PNG: resolução ajustada de {original_size[0]}×{original_size[1]} para {img.width}×{img.height}; pixels foram alterados.'
         return 'PNG otimizado sem alterar pixels; a meta pode não ser alcançada.'
 
     def quality_search(image):
@@ -210,6 +213,10 @@ def document_compress(src, dst, options, event, progress):
     optimized = 0
     with zipfile.ZipFile(src, 'r') as source, zipfile.ZipFile(dst, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as output:
         entries = source.infolist()
+        if any(info.filename.lower().startswith('_xmlsignatures/') or
+               info.filename.lower() in {'meta-inf/documentsignatures.xml', 'meta-inf/macrosignatures.xml', 'meta-inf/signatures.xml'}
+               for info in entries):
+            raise ValueError('Documento com assinatura: preserve o documento original.')
         for position, info in enumerate(entries, 1):
             check_cancel(event)
             progress(f'Otimizando documento · {position}/{len(entries)}')
@@ -231,7 +238,7 @@ def document_compress(src, dst, options, event, progress):
                 except Exception:
                     pass
             output.writestr(info, data)
-    return f'Documento preservado e recompactado. {optimized} imagem(ns) interna(s) otimizada(s).'
+    return f'Documento recompactado. {optimized} imagem(ns) interna(s) otimizada(s), possivelmente com perdas. Propriedades e metadados do documento não são removidos.'
 
 
 def pdf_compress(src, dst, options, target, event, progress):
@@ -250,12 +257,13 @@ def pdf_compress(src, dst, options, target, event, progress):
         pdf.save(dst, compress_streams=True, recompress_flate=True, object_stream_mode=pikepdf.ObjectStreamMode.generate)
     check_cancel(event)
     structural_size = dst.stat().st_size
-    if structural_size <= target or not options.resize_to_target:
+    if structural_size <= target or not options.flatten_pdf:
         return 'PDF otimizado estruturalmente, preservando texto selecionável e páginas.'
 
     # PDF files made mostly of vectors or already-compressed images often cannot
     # shrink structurally. Render a visual fallback only when the requested goal
     # needs it, keeping the smaller of the two candidates.
+    document = None
     try:
         import pypdfium2 as pdfium
         document = pdfium.PdfDocument(str(src))
@@ -272,7 +280,14 @@ def pdf_compress(src, dst, options, target, event, progress):
                     for index in range(len(document)):
                         check_cancel(event)
                         page = document[index]
-                        image = page.render(scale=scale).to_pil().convert('RGB')
+                        try:
+                            bitmap = page.render(scale=scale)
+                            try:
+                                image = bitmap.to_pil().convert('RGB')
+                            finally:
+                                bitmap.close()
+                        finally:
+                            page.close()
                         images.append(image)
                     raster = dst.with_name(f'{dst.stem}-visual-{int(scale*100)}-{quality}.pdf')
                     images[0].save(raster, 'PDF', save_all=True, append_images=images[1:], quality=quality,
@@ -291,14 +306,18 @@ def pdf_compress(src, dst, options, target, event, progress):
                         image.close()
             if best_size <= target:
                 break
-        document.close()
         if best_path:
             dst.unlink(missing_ok=True)
             best_path.replace(dst)
             return 'PDF compactado visualmente para cumprir uma meta agressiva. Texto selecionável, links e formulários foram achatados.'
+    except Cancelled:
+        raise
     except Exception as error:
         # The structural result remains valid even if visual rendering is unavailable.
         return f'PDF otimizado estruturalmente; a compactação visual não foi aplicada ({error}).'
+    finally:
+        if document is not None:
+            document.close()
     return 'PDF otimizado estruturalmente. O original já está próximo do menor tamanho possível sem alterar as páginas.'
 
 

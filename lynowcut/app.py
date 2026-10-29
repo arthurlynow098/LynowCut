@@ -1,16 +1,11 @@
 from __future__ import annotations
 
 import csv
-import hashlib
 import os
 from pathlib import Path
 import queue
-import shutil
 import sys
-import tempfile
 import threading
-import urllib.request
-import zipfile
 
 from PIL import Image, ImageOps
 from PySide6.QtCore import QEasingCurve, QObject, QPoint, Property, QPropertyAnimation, Qt, QTimer, Signal
@@ -22,6 +17,7 @@ from PySide6.QtWidgets import (
 )
 
 from .engine import Cancelled, IMAGES, Options, Result, binary, process, resource
+from .media_install import install as install_media
 
 
 INK = '#191814'
@@ -227,8 +223,10 @@ class MainWindow(QMainWindow):
         self.slider = QSlider(Qt.Orientation.Horizontal); self.slider.setObjectName('slider'); self.slider.setRange(1, 95); self.slider.setValue(70); self.slider.valueChanged.connect(self.slider_changed); second.addWidget(self.slider, 1)
         self.max_mb = QLineEdit('10'); self.max_mb.setObjectName('number'); self.max_mb.setFixedWidth(66); self.max_mb.setAlignment(Qt.AlignmentFlag.AlignCenter); second.addWidget(self.max_mb)
         second.addWidget(self.label('MB', 'unit')); layout.addLayout(second)
-        third = QHBoxLayout(); self.metadata = button('✓  Remover metadados', 'toggle'); self.metadata.setCheckable(True); self.metadata.setChecked(True); third.addWidget(self.metadata)
+        third = QHBoxLayout(); self.metadata = button('✓  Remover metadados de imagens/PDF/mídia', 'toggle'); self.metadata.setCheckable(True); self.metadata.setChecked(True); third.addWidget(self.metadata)
         self.resize = button('✓  Ajustar resolução para atingir a meta', 'toggle'); self.resize.setCheckable(True); self.resize.setChecked(True); third.addWidget(self.resize)
+        self.flatten_pdf = button('Achatar PDF (remove texto, links e formulários)', 'toggle'); self.flatten_pdf.setCheckable(True); self.flatten_pdf.setChecked(False); self.flatten_pdf.clicked.connect(self.confirm_flatten_pdf)
+        layout.addWidget(self.flatten_pdf)
         advanced = button('Recorte de mídia', 'quiet'); advanced.clicked.connect(self.show_advanced); third.addWidget(advanced); third.addStretch()
         self.folder = button('Pasta de saída  ·  Downloads/LynowCut', 'destination'); self.folder.clicked.connect(self.choose_folder); third.addWidget(self.folder); layout.addLayout(third)
         examples = QHBoxLayout(); examples.setSpacing(7)
@@ -317,7 +315,12 @@ class MainWindow(QMainWindow):
         return Options(reduction=self.reduction, max_mb=number(self.max_mb.text()) if self.mode == 'Tamanho máximo' else None,
                        image_format=self.format, min_quality=quality, remove_metadata=self.metadata.isChecked(), action=self.action,
                        start=number(getattr(self, 'start_value', '0')), duration=number(self.duration_value) if getattr(self, 'duration_value', '').strip() else None,
-                       resize_to_target=self.resize.isChecked())
+                       resize_to_target=self.resize.isChecked(), flatten_pdf=self.flatten_pdf.isChecked())
+
+    def confirm_flatten_pdf(self):
+        if self.flatten_pdf.isChecked():
+            answer = QMessageBox.warning(self, 'Achatar PDF', 'Esta opção pode transformar páginas em imagens e remover texto pesquisável, links, formulários e acessibilidade. Permitir para os PDFs desta fila?', QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
+            self.flatten_pdf.setChecked(answer == QMessageBox.StandardButton.Yes)
 
     def start(self):
         if self.busy or not self.paths:
@@ -421,30 +424,25 @@ class MainWindow(QMainWindow):
         self.media.style().unpolish(self.media); self.media.style().polish(self.media)
 
     def install_ffmpeg(self):
+        if getattr(self, 'media_install_event', None) is not None:
+            self.media_install_event.set(); self.media.setText('Cancelando download…'); return
         try: binary('ffmpeg'); binary('ffprobe'); QMessageBox.information(self, 'Recursos de mídia', 'Tudo já está pronto.'); return
         except RuntimeError: pass
         if QMessageBox.question(self, 'Ativar áudio e vídeo', 'Baixar aproximadamente 110 MB? Os arquivos ficam somente na pasta do LynowCut.') != QMessageBox.StandardButton.Yes: return
-        self.media.setText('Baixando recursos…'); self.media.setEnabled(False); threading.Thread(target=self._install_ffmpeg_worker, daemon=True).start()
+        self.media_install_event = threading.Event()
+        self.media.setText('Cancelar download de mídia'); threading.Thread(target=self._install_ffmpeg_worker, daemon=True).start()
 
     def _install_ffmpeg_worker(self):
         try:
-            root = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path(__file__).resolve().parents[1]; target = root / 'bin'; target.mkdir(parents=True, exist_ok=True)
-            url = 'https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip'
-            with tempfile.TemporaryDirectory(prefix='lynowcut-ffmpeg-') as temp:
-                archive = Path(temp) / 'ffmpeg.zip'; urllib.request.urlretrieve(url, archive); expected = urllib.request.urlopen(url + '.sha256', timeout=30).read().decode('ascii').split()[0]
-                digest = hashlib.sha256()
-                with archive.open('rb') as downloaded:
-                    while chunk := downloaded.read(1024 * 1024): digest.update(chunk)
-                if digest.hexdigest() != expected: raise RuntimeError('A verificação de segurança do download falhou.')
-                with zipfile.ZipFile(archive) as package:
-                    files = {Path(member).name.lower(): member for member in package.namelist() if Path(member).name.lower() in {'ffmpeg.exe', 'ffprobe.exe'} and '/bin/' in member.replace('\\', '/').lower()}
-                    if len(files) != 2: raise RuntimeError('Pacote de mídia inválido.')
-                    for name, member in files.items():
-                        with package.open(member) as source, (target / name).open('wb') as output: shutil.copyfileobj(source, output)
+            root = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path(__file__).resolve().parents[1]
+            install_media(root, self.media_install_event)
             self.events.put(('ffmpeg_installed',))
         except Exception as error: self.events.put(('ffmpeg_error', str(error)))
+        finally: self.media_install_event = None
 
     def closeEvent(self, event):
+        if getattr(self, 'media_install_event', None) is not None:
+            self.media_install_event.set()
         if self.busy: self.closing = True; self.stop(); event.ignore()
         else: event.accept()
 
