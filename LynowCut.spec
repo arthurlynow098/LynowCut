@@ -1,6 +1,9 @@
 from pathlib import Path
+from PyInstaller.utils.hooks import collect_data_files
 root = Path(SPECPATH)
 datas = [(str(root/'assets'), 'assets')]
+for package in ('pypdfium2', 'pypdfium2_raw', 'pikepdf', 'pillow_heif', 'PIL', 'PySide6', 'shiboken6'):
+    datas += collect_data_files(package, includes=['**/LICENSE*', '**/COPYING*', '**/NOTICE*', '**/licenses/**'])
 # FFmpeg is optional and downloaded by the application when the user enables
 # audio/video features. Keeping it out of the base package makes the primary
 # LynowCut download dramatically smaller.

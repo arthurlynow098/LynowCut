@@ -15,6 +15,8 @@
 > [!IMPORTANT]
 > O pacote completo para Windows está disponível em **[Releases](https://github.com/arthurlynow098/LynowCut/releases)**. Extraia todo o ZIP antes de abrir o programa. Os binários não ficam dentro do histórico do repositório.
 
+> O ZIP publicado corresponde à sua tag. Esta documentação acompanha o código atual; correções posteriores à `v0.1.0-alpha` só chegam ao executável em uma nova Release. Consulte as notas antes de baixar. A [matriz de capacidades e limites](docs/CAPABILITIES.md) é a referência de suporte.
+
 ## Sobre o projeto
 
 Todo mundo já passou por isso, o PDF não cabe no e-mail, o vídeo ficou pesado demais ou uma pasta de imagens ocupa muito mais espaço do que deveria. O LynowCut nasceu para resolver esse momento sem transformar uma tarefa simples em uma sequência de sites, conversores e configurações confusas.
@@ -108,7 +110,7 @@ O LynowCut tenta falar a língua de quem só precisa resolver o arquivo. A fila 
 6. Clique em **Comprimir agora** e acompanhe o resultado de cada arquivo.
 7. Para vídeos e extração de áudio, ative os recursos de mídia pela lateral do aplicativo.
 
-O pacote principal não inclui o FFmpeg para manter o download menor. Quando o usuário ativa áudio e vídeo, o LynowCut baixa os componentes necessários, valida o arquivo recebido e os mantém ao lado da aplicação.
+O pacote principal não inclui o FFmpeg. A instalação guiada usa versão e SHA-256 fixados no código, timeout e limite de download; os executáveis são validados antes de serem ativados juntos ao lado da aplicação. Requer rede e permissão de escrita nessa pasta. O processamento dos arquivos é local.
 
 ## Estrutura do repositório
 
@@ -148,7 +150,7 @@ Também é possível executar `INICIAR.bat`, que prepara o ambiente e abre o apl
 ### Testes e distribuição
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements-build.txt
+.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 .\.venv\Scripts\python.exe -m PyInstaller --noconfirm --clean LynowCut.spec
 ```
@@ -162,14 +164,14 @@ O resultado será criado em `dist\LynowCut`. A pasta `_internal` deve ser distri
 - **Meta mensurável:** cada operação compara o resultado em bytes com o objetivo informado.
 - **Qualidade com limite:** imagens procuram a melhor qualidade possível sem ultrapassar a meta, com redimensionamento proporcional opcional.
 - **FFmpeg sob demanda:** reduz o tamanho inicial do aplicativo e ativa mídia somente para quem precisa.
-- **PDF adaptativo:** tenta primeiro a otimização estrutural e usa uma versão visual apenas quando a meta agressiva exige essa alternativa.
-- **Build reproduzível:** testes e empacotamento são executados automaticamente pelo GitHub Actions antes de publicar uma Release.
+- **PDF com consentimento:** preserva a estrutura por padrão; a alternativa visual exige habilitar “Achatar PDF” e confirmar a perda de recursos antes de processar.
+- **Build automatizado:** GitHub Actions testa o motor, documentos reais com LibreOffice e o aplicativo extraído do ZIP antes de publicar; dependências transitivas são fixadas e registradas. Não há promessa de reprodução byte a byte.
 
 ## Estado atual
 
 Esta é a versão **0.1.0 alpha**. Compressão de imagens, PDFs, documentos, ZIP, vídeo e áudio está implementada, junto da fila, cancelamento, comparação e relatório. O suporte de vídeo depende da instalação opcional do FFmpeg.
 
-Alguns formatos já chegam fortemente compactados e podem apresentar pouco ganho. Em PDFs fotográficos, uma meta agressiva pode converter as páginas em conteúdo visual, preservando a aparência, mas removendo recursos como texto pesquisável, links e formulários. O aplicativo informa esse comportamento no resultado.
+Alguns formatos já chegam compactados e podem apresentar pouco ganho. As metas não são garantidas. Imagens podem perder qualidade e resolução. “Achatar PDF” vem desligado e pode remover texto pesquisável, links, formulários e acessibilidade; o modo padrão preserva a estrutura mesmo quando não atinge a meta. Documentos com indicadores conhecidos de assinatura são recusados. Propriedades pessoais dos documentos não são removidas. ZIP cria um pacote por arquivo, sem agrupar a fila. Consulte a matriz de capacidades para os demais limites.
 
 O executável Windows ainda não possui assinatura Authenticode comercial. Em máquinas que ainda não reconhecem o editor, o Windows pode exibir um aviso de reputação. As Releases são produzidas automaticamente a partir do código versionado neste repositório.
 
@@ -181,7 +183,10 @@ O executável Windows ainda não possui assinatura Authenticode comercial. Em m�
 - [Testes automatizados](tests/test_engine.py)
 - [Landing page](site/dist/index.html)
 - [Automação de Releases](.github/workflows/release.yml)
+- [Capacidades e limites](docs/CAPABILITIES.md)
+- [Publicação e assinatura](docs/RELEASING.md)
+- [Licenças de terceiros](THIRD-PARTY-NOTICES.md)
 
 ## Licença
 
-Distribuído sob a [licença MIT](LICENSE). A fonte Inter usada pela interface mantém sua licença no diretório [`assets/fonts`](assets/fonts).
+O código LynowCut usa a [licença MIT](LICENSE). Dependências mantêm suas próprias licenças; o pacote inclui inventário e avisos de terceiros. A fonte Inter mantém sua licença no diretório [`assets/fonts`](assets/fonts).

@@ -1,4 +1,10 @@
 .venv/
+.venv-build/
+media-*/
+.media-*/
+release-package/
+release-output/
+*.zip
 __pycache__/
 *.pyc
 /build/

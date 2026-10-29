@@ -1,5 +1,6 @@
 import hashlib
 import io
+import os
 import shutil
 import subprocess
 import tempfile
@@ -124,7 +125,7 @@ class EngineTests(unittest.TestCase):
     def test_photo_pdf_uses_visual_fallback_for_aggressive_goal(self):
         src = self.root/'photo.pdf'
         Image.effect_noise((1200, 900), 80).convert('RGB').save(src, 'PDF', quality=98)
-        result = process(src, self.out, Options(reduction=80, min_quality=35))
+        result = process(src, self.out, Options(reduction=80, min_quality=35, flatten_pdf=True))
         self.assertEqual(result.status, 'Meta atingida')
         self.assertLessEqual(result.after, result.target)
         self.assertIn('compactado visualmente', result.note)
@@ -143,7 +144,7 @@ class EngineTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 Options(max_mb=mb).target(100)
 
-    @unittest.skipUnless(shutil.which('ffmpeg') and shutil.which('ffprobe'), 'FFmpeg não disponível')
+    @unittest.skipUnless(os.environ.get('LYNOWCUT_REQUIRE_MEDIA') or (shutil.which('ffmpeg') and shutil.which('ffprobe')), 'FFmpeg não disponível (não permitido no CI de publicação)')
     def test_video_two_pass_and_extract(self):
         src = self.root/'video.avi'
         subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', 'testsrc2=size=160x120:rate=15', '-f', 'lavfi', '-i', 'sine=frequency=440', '-t', '2', '-c:v', 'mpeg4', '-q:v', '2', '-c:a', 'pcm_s16le', str(src)], check=True)

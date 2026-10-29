@@ -1,0 +1,6 @@
+-r requirements-build.txt
+python-docx==1.2.0
+python-pptx==1.0.2
+openpyxl==3.1.5
+odfpy==1.4.1
+pip-licenses==5.0.0
