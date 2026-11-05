@@ -1,5 +1,3 @@
-<p align="center"><img src="assets/project-animal.png" alt="louva-a-deus — símbolo do projeto" width="280"></p>
-
 <p align="center"><sub>LynowCut</sub></p>
 
 ---
