@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  Escolha quanto o arquivo precisa pesar. O LynowCut cuida do resto — sem mandar nada para a nuvem.
+  Escolha quanto o arquivo precisa pesar. O LynowCut cuida do resto, sem mandar nada para a nuvem.
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@
 
 Todo mundo já passou por isso, o PDF não cabe no e-mail, o vídeo ficou pesado demais ou uma pasta de imagens ocupa muito mais espaço do que deveria. O LynowCut nasceu para resolver esse momento sem transformar uma tarefa simples em uma sequência de sites, conversores e configurações confusas.
 
-Você escolhe quanto quer reduzir ou informa o tamanho máximo. O programa procura o melhor resultado possível, mostra quanto espaço foi recuperado e salva uma nova cópia. Tudo acontece no seu computador: sem conta, sem nuvem, sem anúncios e sem mexer no arquivo original.
+Você escolhe quanto quer reduzir ou informa o tamanho máximo. O programa procura o melhor resultado possível, mostra quanto espaço foi recuperado e salva uma nova cópia. Tudo acontece no seu computador, sem conta, sem nuvem, sem anúncios e sem mexer no arquivo original.
 
 <p align="center">
   <img src="assets/lynowcut-app.png" alt="Aplicativo LynowCut para Windows" width="100%">
@@ -33,13 +33,13 @@ Você escolhe quanto quer reduzir ou informa o tamanho máximo. O programa procu
 
 | Recurso | Como funciona |
 |---|---|
-| Meta por porcentagem | Você escolhe quanto quer reduzir; o LynowCut equilibra qualidade, resolução e tamanho. |
+| Meta por porcentagem | Você escolhe quanto quer reduzir. O LynowCut equilibra qualidade, resolução e tamanho. |
 | Tamanho máximo | Precisa caber em um anexo de 10 MB? Informe o limite e deixe o programa trabalhar nessa meta. |
 | Imagens otimizadas | Reduza fotos, artes e capturas ou converta para formatos modernos como WebP e AVIF. |
 | PDFs e documentos | Deixe apresentações, planilhas, arquivos do Word e PDFs mais fáceis de guardar e compartilhar. |
 | Vídeo e áudio | Comprima vídeos ou guarde apenas o áudio quando a imagem não for necessária. |
 | Privacidade local | Seus arquivos continuam no seu computador e os originais nunca são substituídos. |
-| Organização da saída | Escolha onde salvar; o programa evita nomes repetidos e mantém cada resultado organizado. |
+| Organização da saída | Escolha onde salvar. O programa evita nomes repetidos e mantém cada resultado organizado. |
 | Relatório e comparação | Veja o antes e depois, confira o espaço recuperado e exporte um resumo em CSV. |
 
 ## Tecnologias
@@ -57,26 +57,26 @@ Você escolhe quanto quer reduzir ou informa o tamanho máximo. O programa procu
 
 ### Aplicação desktop
 
-- **Python 3.12** para a aplicação e o motor de processamento;
-- **PySide6 / Qt 6** para a interface nativa do Windows;
-- **PyInstaller** para gerar a distribuição `win-x64`;
-- interface com fila, estados de processamento, cancelamento e pasta de saída;
-- publicação portátil: extraia o pacote e abra `LynowCut.exe`.
+- **Python 3.12** para a aplicação e o motor de processamento
+- **PySide6 / Qt 6** para a interface nativa do Windows
+- **PyInstaller** para gerar a distribuição `win-x64`
+- interface com fila, estados de processamento, cancelamento e pasta de saída
+- publicação portátil. Extraia o pacote e abra `LynowCut.exe`.
 
 ### Imagens, PDFs e documentos
 
-- **Pillow** para leitura, conversão, redimensionamento e compressão de imagens;
-- **pillow-heif** para HEIC e HEIF quando o codec está disponível;
-- **pikepdf** para otimização estrutural de PDFs;
-- **pypdfium2** para a redução visual de PDFs fotográficos em metas agressivas;
+- **Pillow** para leitura, conversão, redimensionamento e compressão de imagens
+- **pillow-heif** para HEIC e HEIF quando o codec está disponível
+- **pikepdf** para otimização estrutural de PDFs
+- **pypdfium2** para a redução visual de PDFs fotográficos em metas agressivas
 - recompressão de imagens incorporadas em documentos baseados em ZIP, como DOCX, PPTX e XLSX.
 
 ### Vídeo e áudio
 
-- **FFmpeg** e **ffprobe** instalados opcionalmente pela própria interface;
-- conversão de vídeos compatíveis para MP4 com H.264 e AAC;
-- extração de áudio para MP3;
-- suporte a recorte por início e duração;
+- **FFmpeg** e **ffprobe** instalados opcionalmente pela própria interface
+- conversão de vídeos compatíveis para MP4 com H.264 e AAC
+- extração de áudio para MP3
+- suporte a recorte por início e duração
 - medição do resultado final antes de confirmar a meta atingida.
 
 ## Arquitetura
@@ -139,7 +139,7 @@ LynowCut/
 
 ### Windows
 
-Requisitos: Windows 10 ou mais recente e Python 3.12.
+Para rodar você precisa de Windows 10 ou mais recente e Python 3.12.
 
 ```powershell
 py -3.12 -m venv .venv
@@ -161,13 +161,13 @@ O resultado será criado em `dist\LynowCut`. A pasta `_internal` deve ser distri
 
 ## Decisões técnicas
 
-- **Processamento local:** mantém os arquivos no computador e evita depender de serviços externos.
-- **Originais preservados:** nenhum processamento substitui silenciosamente o arquivo fornecido pelo usuário.
-- **Meta mensurável:** cada operação compara o resultado em bytes com o objetivo informado.
-- **Qualidade com limite:** imagens procuram a melhor qualidade possível sem ultrapassar a meta, com redimensionamento proporcional opcional.
-- **FFmpeg sob demanda:** reduz o tamanho inicial do aplicativo e ativa mídia somente para quem precisa.
-- **PDF adaptativo:** tenta primeiro a otimização estrutural e usa uma versão visual apenas quando a meta agressiva exige essa alternativa.
-- **Build reproduzível:** testes e empacotamento são executados automaticamente pelo GitHub Actions antes de publicar uma Release.
+- **Processamento local.** Mantém os arquivos no computador e evita depender de serviços externos.
+- **Originais preservados.** Nenhum processamento substitui silenciosamente o arquivo fornecido pelo usuário.
+- **Meta mensurável.** Cada operação compara o resultado em bytes com o objetivo informado.
+- **Qualidade com limite.** Imagens procuram a melhor qualidade possível sem ultrapassar a meta, com redimensionamento proporcional opcional.
+- **FFmpeg sob demanda.** Reduz o tamanho inicial do aplicativo e ativa mídia somente para quem precisa.
+- **PDF adaptativo.** Tenta primeiro a otimização estrutural e usa uma versão visual apenas quando a meta agressiva exige essa alternativa.
+- **Build reproduzível.** Testes e empacotamento são executados automaticamente pelo GitHub Actions antes de publicar uma Release.
 
 ## Estado atual
 
