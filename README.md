@@ -3,7 +3,7 @@
 ---
 
 <p align="center">
-  <img src="assets/lynowcut-banner.png" alt="LynowCut" width="100%">
+  <img src="assets/banner.png" alt="LynowCut" width="100%">
 </p>
 
 <p align="center">
@@ -19,7 +19,9 @@
 > [!IMPORTANT]
 > O pacote completo para Windows está disponível em **[Releases](https://github.com/arthurlynow098/LynowCut/releases)**. Extraia todo o ZIP antes de abrir o programa. Os binários não ficam dentro do histórico do repositório.
 
-## Sobre o projeto
+<a id="sobre-o-projeto"></a>
+
+<p><img src="assets/secao-01.png" alt="Sobre o projeto" width="100%"></p>
 
 Todo mundo já passou por isso, o PDF não cabe no e-mail, o vídeo ficou pesado demais ou uma pasta de imagens ocupa muito mais espaço do que deveria. O LynowCut nasceu para resolver esse momento sem transformar uma tarefa simples em uma sequência de sites, conversores e configurações confusas.
 
@@ -29,7 +31,9 @@ Você escolhe quanto quer reduzir ou informa o tamanho máximo. O programa procu
   <img src="assets/lynowcut-app.png" alt="Aplicativo LynowCut para Windows" width="100%">
 </p>
 
-## Principais recursos
+<a id="principais-recursos"></a>
+
+<p><img src="assets/secao-02.png" alt="Principais recursos" width="100%"></p>
 
 | Recurso | Como funciona |
 |---|---|
@@ -42,7 +46,9 @@ Você escolhe quanto quer reduzir ou informa o tamanho máximo. O programa procu
 | Organização da saída | Escolha onde salvar. O programa evita nomes repetidos e mantém cada resultado organizado. |
 | Relatório e comparação | Veja o antes e depois, confira o espaço recuperado e exporte um resumo em CSV. |
 
-## Tecnologias
+<a id="tecnologias"></a>
+
+<p><img src="assets/secao-03.png" alt="Tecnologias" width="100%"></p>
 
 <p>
   <img alt="Python" src="https://img.shields.io/badge/Python_3.12-3776AB?style=flat-square&logo=python&logoColor=white">
@@ -79,7 +85,9 @@ Você escolhe quanto quer reduzir ou informa o tamanho máximo. O programa procu
 - suporte a recorte por início e duração
 - medição do resultado final antes de confirmar a meta atingida.
 
-## Arquitetura
+<a id="arquitetura"></a>
+
+<p><img src="assets/secao-04.png" alt="Arquitetura" width="100%"></p>
 
 ```mermaid
 flowchart LR
@@ -98,11 +106,15 @@ flowchart LR
 
 A interface envia cada item da fila para o motor local com uma meta calculada. O processador escolhe a estratégia adequada ao formato, mede o arquivo produzido e informa se a meta foi atingida. O original permanece intacto durante todo o fluxo.
 
-## Experiência no Windows
+<a id="experiência-no-windows"></a>
+
+<p><img src="assets/secao-05.png" alt="Experiência no Windows" width="100%"></p>
 
 O LynowCut tenta falar a língua de quem só precisa resolver o arquivo. A fila mostra o que entrou, o que saiu e quanto espaço foi economizado. Formato, qualidade e destino ficam visíveis, enquanto opções mais avançadas aparecem somente quando realmente ajudam.
 
-## Fluxo de uso
+<a id="fluxo-de-uso"></a>
+
+<p><img src="assets/secao-06.png" alt="Fluxo de uso" width="100%"></p>
 
 1. Baixe o pacote para Windows em **[Releases](https://github.com/arthurlynow098/LynowCut/releases)**.
 2. Extraia todo o conteúdo de `LynowCut-Windows-x64.zip`.
@@ -114,7 +126,9 @@ O LynowCut tenta falar a língua de quem só precisa resolver o arquivo. A fila 
 
 O pacote principal não inclui o FFmpeg para manter o download menor. Quando o usuário ativa áudio e vídeo, o LynowCut baixa os componentes necessários, valida o arquivo recebido e os mantém ao lado da aplicação.
 
-## Estrutura do repositório
+<a id="estrutura-do-repositório"></a>
+
+<p><img src="assets/secao-07.png" alt="Estrutura do repositório" width="100%"></p>
 
 ```text
 LynowCut/
@@ -135,7 +149,9 @@ LynowCut/
 └── LEIA-ME-PRIMEIRO.md              Guia completo do projeto
 ```
 
-## Executando o código
+<a id="executando-o-código"></a>
+
+<p><img src="assets/secao-08.png" alt="Executando o código" width="100%"></p>
 
 ### Windows
 
@@ -159,7 +175,9 @@ Também é possível executar `INICIAR.bat`, que prepara o ambiente e abre o apl
 
 O resultado será criado em `dist\LynowCut`. A pasta `_internal` deve ser distribuída junto de `LynowCut.exe`.
 
-## Decisões técnicas
+<a id="decisões-técnicas"></a>
+
+<p><img src="assets/secao-09.png" alt="Decisões técnicas" width="100%"></p>
 
 - **Processamento local.** Mantém os arquivos no computador e evita depender de serviços externos.
 - **Originais preservados.** Nenhum processamento substitui silenciosamente o arquivo fornecido pelo usuário.
@@ -169,7 +187,9 @@ O resultado será criado em `dist\LynowCut`. A pasta `_internal` deve ser distri
 - **PDF adaptativo.** Tenta primeiro a otimização estrutural e usa uma versão visual apenas quando a meta agressiva exige essa alternativa.
 - **Build reproduzível.** Testes e empacotamento são executados automaticamente pelo GitHub Actions antes de publicar uma Release.
 
-## Estado atual
+<a id="estado-atual"></a>
+
+<p><img src="assets/secao-10.png" alt="Estado atual" width="100%"></p>
 
 Esta é a versão **0.1.0 alpha**. Compressão de imagens, PDFs, documentos, ZIP, vídeo e áudio está implementada, junto da fila, cancelamento, comparação e relatório. O suporte de vídeo depende da instalação opcional do FFmpeg.
 
@@ -177,7 +197,9 @@ Alguns formatos já chegam fortemente compactados e podem apresentar pouco ganho
 
 O executável Windows ainda não possui assinatura Authenticode comercial. Em máquinas que ainda não reconhecem o editor, o Windows pode exibir um aviso de reputação. As Releases são produzidas automaticamente a partir do código versionado neste repositório.
 
-## Documentação
+<a id="documentação"></a>
+
+<p><img src="assets/secao-11.png" alt="Documentação" width="100%"></p>
 
 - [Guia completo do projeto](LEIA-ME-PRIMEIRO.md)
 - [Direção do produto](PRODUTO.md)
@@ -186,7 +208,9 @@ O executável Windows ainda não possui assinatura Authenticode comercial. Em m�
 - [Landing page](site/dist/index.html)
 - [Automação de Releases](.github/workflows/release.yml)
 
-## Licença
+<a id="licença"></a>
+
+<p><img src="assets/secao-12.png" alt="Licença" width="100%"></p>
 
 Distribuído sob a [licença MIT](LICENSE). A fonte Inter usada pela interface mantém sua licença no diretório [`assets/fonts`](assets/fonts).
 
